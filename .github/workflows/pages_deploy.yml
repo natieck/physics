@@ -21,6 +21,9 @@ concurrency:
   group: "pages"
   cancel-in-progress: false
 
+env:
+  WORKING_DIRECTORY: docs
+
 jobs:
   # Single deploy job since we're just deploying
   deploy:
@@ -28,6 +31,9 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ env.WORKING_DIRECTORY }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -38,12 +44,16 @@ jobs:
         with:
           node-version: "20"
       - name: Run pagefind command
-        run: npx -y pagefind --site docs/apps/acceleration_measurement_and_analysis/manual_analysis_jp
+        run: |
+          npx -y pagefind --site ${{ env.WORKING_DIRECTORY}}/apps/acceleration_measurement_and_analysis/manual_measurement
+          npx -y pagefind --site ${{ env.WORKING_DIRECTORY}}/apps/acceleration_measurement_and_analysis/manual_measurement_jp
+          npx -y pagefind --site ${{ env.WORKING_DIRECTORY}}/apps/acceleration_measurement_and_analysis/manual_analysis
+          npx -y pagefind --site ${{ env.WORKING_DIRECTORY}}/apps/acceleration_measurement_and_analysis/manual_analysis_jp
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           # Upload entire repository
-          path: './docs'
+          path: ${{ env.WORKING_DIRECTORY}}
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
