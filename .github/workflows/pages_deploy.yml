@@ -33,6 +33,12 @@ jobs:
         uses: actions/checkout@v4
       - name: Setup Pages
         uses: actions/configure-pages@v5
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Run pagefind command
+        run: npx -y pagefind --site docs/apps/acceleration_measurement_and_analysis/manual_analysis_jp
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
