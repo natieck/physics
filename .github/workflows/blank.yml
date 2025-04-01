@@ -37,6 +37,6 @@ jobs:
 
       # pwd, ls
       - name: pwd, ls
-       run: |
-         pwd
-         ls -la
+        run: |
+          pwd
+          ls -la
